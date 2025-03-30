@@ -1,5 +1,4 @@
 import React from 'react';
-
 function App() {
   return (
     <div style={{ backgroundColor: '#1E3855', color: '#FFFFFF', padding: '40px' }}>
@@ -8,5 +7,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
