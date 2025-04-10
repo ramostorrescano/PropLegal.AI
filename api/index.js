@@ -1,5 +1,5 @@
 const express = require('express');
-const stripe = require('stripe')('your-stripe-secret-key'); // Replace with your key
+const stripe = require('stripe')('your-stripe-secret-key');
 
 const app = express();
 app.use(express.json());
@@ -30,8 +30,7 @@ app.post('/signup', async (req, res) => {
 app.post('/reset-password', async (req, res) => {
   const { email } = req.body;
   try {
-    // TODO: Integrate email service (e.g., SendGrid) to send reset link
-    console.log(`Reset requested for ${email}`); // Mock for now
+    console.log(`Reset requested for ${email}`);
     res.json({ message: 'Reset link sent (mock)' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to send reset link' });
