@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react'; // Dropped useEffect if unused
 import { Upload, DollarSign, Send, Loader } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -106,19 +106,19 @@ function App() {
   };
 
   // Styles
-  const containerStyle = { backgroundColor: '#1E3855', color: '#FFFFFF', padding: '40px', minHeight: '100vh', fontFamily: 'Poppins, sans-serif' };
+  const containerStyle = { backgroundColor: '#1E3855', color: '#FFFFFF', padding: '40px', minHeight: '100vh', fontFamily: 'Poppins, sans-serif', display: 'block' };
   const headerStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' };
-  const logoStyle = { width: '40px', height: '40px', transition: 'transform 0.2s' };
+  const logoStyle = { width: '40px', height: '40px', transition: 'transform 0.2s ease' };
   const contentStyle = { maxWidth: '800px', margin: '0 auto', textAlign: 'center' };
-  const headingStyle = { fontSize: '2.5rem', fontWeight: '600', marginBottom: '20px', transition: 'color 0.2s' };
-  const subheadingStyle = { fontSize: '1.2rem', marginBottom: '40px', transition: 'color 0.2s' };
+  const headingStyle = { fontSize: '2.5rem', fontWeight: '600', marginBottom: '20px' };
+  const subheadingStyle = { fontSize: '1.2rem', marginBottom: '40px' };
   const sectionStyle = { marginBottom: '40px', textAlign: 'left' };
-  const sectionHeadingStyle = { fontSize: '1.5rem', fontWeight: '500', marginBottom: '15px', transition: 'color 0.2s' };
+  const sectionHeadingStyle = { fontSize: '1.5rem', fontWeight: '500', marginBottom: '15px' };
   const inputStyle = { display: 'block', width: '100%', padding: '12px', margin: '10px 0', borderRadius: '8px', border: 'none', backgroundColor: '#FFFFFF', color: '#1E3855' };
-  const buttonStyle = { backgroundColor: '#3B5998', color: '#FFFFFF', padding: '12px 24px', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600', transition: 'background-color 0.2s' };
+  const buttonStyle = { backgroundColor: '#3B5998', color: '#FFFFFF', padding: '12px 24px', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600', transition: 'background-color 0.2s ease' };
   const buttonDisabledStyle = { ...buttonStyle, backgroundColor: '#2A4373', cursor: 'not-allowed' };
-  const linkStyle = { color: '#3B5998', cursor: 'pointer', textDecoration: 'underline', marginTop: '10px', display: 'block', transition: 'color 0.2s' };
-  const planCardStyle = { backgroundColor: '#2A4A70', padding: '20px', borderRadius: '8px', margin: '10px', flex: '1', minWidth: '200px', transition: 'transform 0.2s' };
+  const linkStyle = { color: '#3B5998', cursor: 'pointer', textDecoration: 'underline', marginTop: '10px', display: 'block' };
+  const planCardStyle = { backgroundColor: '#2A4A70', padding: '20px', borderRadius: '8px', margin: '10px', flex: '1', minWidth: '200px', transition: 'transform 0.2s ease' };
   const planGridStyle = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' };
 
   return (
