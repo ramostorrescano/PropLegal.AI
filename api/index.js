@@ -1,18 +1,30 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const fetch = require('node-fetch');
+const express = require('express');
+const stripe = require('stripe')('your-stripe-secret-key'); // Replace with your key
 
-module.exports = async (req, res) => {
-  if (req.method === 'POST') {
-    const { question } = req.body;
-    if (question) {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'gpt-3.5-turbo', messages: [{ role: 'user', content: question }] })
-      });
-      const data = await response.json();
-      return res.status(200).json({ answer: data.choices[0].message.content || 'Error: No response from AI' });
-    }
+const app = express();
+app.use(express.json());
+
+app.post('/signup', async (req, res) => {
+  const { email, password, plan, price } = req.body;
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: { name: `${plan} Plan` },
+          unit_amount: price * 100, // Cents
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: 'https://prop-legal-ai.vercel.app/success',
+      cancel_url: 'https://prop-legal-ai.vercel.app/cancel',
+    });
+    res.json({ sessionId: session.id });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-  res.status(200).json({ message: 'OK' });
-};
+});
+
+module.exports = app;
