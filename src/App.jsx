@@ -17,6 +17,8 @@ function App() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [showReset, setShowReset] = useState(false);
 
   const plans = [
     { name: 'Starter (Beta)', docs: 10, price: 59, pricePerDoc: 5.90, note: 'Early adopter deal — best for testing' },
@@ -79,6 +81,30 @@ function App() {
     setLoading(false);
   };
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch('/api/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: resetEmail }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert('Reset link sent to your email!');
+        setShowReset(false);
+      } else {
+        alert(data.error || 'Reset failed!');
+      }
+    } catch (error) {
+      console.error('Reset error:', error);
+      alert('Reset failed!');
+    }
+    setLoading(false);
+    setResetEmail('');
+  };
+
   // Styles
   const containerStyle = { backgroundColor: '#1E3855', color: '#FFFFFF', padding: '40px', minHeight: '100vh', fontFamily: 'Poppins, sans-serif' };
   const headerStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' };
@@ -91,6 +117,7 @@ function App() {
   const inputStyle = { display: 'block', width: '100%', padding: '12px', margin: '10px 0', borderRadius: '8px', border: 'none', backgroundColor: '#FFFFFF', color: '#1E3855' };
   const buttonStyle = { backgroundColor: '#3B5998', color: '#FFFFFF', padding: '12px 24px', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600', transition: 'background-color 0.2s' };
   const buttonDisabledStyle = { ...buttonStyle, backgroundColor: '#2A4373', cursor: 'not-allowed' };
+  const linkStyle = { color: '#3B5998', cursor: 'pointer', textDecoration: 'underline', marginTop: '10px', display: 'block', transition: 'color 0.2s' };
   const planCardStyle = { backgroundColor: '#2A4A70', padding: '20px', borderRadius: '8px', margin: '10px', flex: '1', minWidth: '200px', transition: 'transform 0.2s' };
   const planGridStyle = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' };
 
@@ -131,14 +158,33 @@ function App() {
         {/* Signup Form */}
         <section style={sectionStyle}>
           <h2 style={sectionHeadingStyle}>Sign Up</h2>
-          <form onSubmit={(e) => handleSignup(e, plans[0])}>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={inputStyle} disabled={loading} />
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" style={inputStyle} disabled={loading} />
-            <button type="submit" style={loading ? buttonDisabledStyle : buttonStyle} disabled={loading}>
-              {loading ? <Loader size={18} /> : <DollarSign size={18} />}
-              {loading ? 'Processing...' : 'Sign Up'}
-            </button>
-          </form>
+          {showReset ? (
+            <form onSubmit={handleResetPassword}>
+              <input
+                type="email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                placeholder="Enter your email"
+                style={inputStyle}
+                disabled={loading}
+              />
+              <button type="submit" style={loading ? buttonDisabledStyle : buttonStyle} disabled={loading}>
+                {loading ? <Loader size={18} /> : <Send size={18} />}
+                {loading ? 'Sending...' : 'Reset Password'}
+              </button>
+              <span style={linkStyle} onClick={() => setShowReset(false)}>Back to Signup</span>
+            </form>
+          ) : (
+            <form onSubmit={(e) => handleSignup(e, plans[0])}>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={inputStyle} disabled={loading} />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" style={inputStyle} disabled={loading} />
+              <button type="submit" style={loading ? buttonDisabledStyle : buttonStyle} disabled={loading}>
+                {loading ? <Loader size={18} /> : <DollarSign size={18} />}
+                {loading ? 'Processing...' : 'Sign Up'}
+              </button>
+              <span style={linkStyle} onClick={() => setShowReset(true)}>Forgot Password?</span>
+            </form>
+          )}
         </section>
 
         {/* File Upload */}
